@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_assigned_picking_types_user" model="res.groups">
+        <field name="name">Partner: Assigned Operation Types Only</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+        <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
+        <field name="comment">The Partner will have access to her assigned operation types.</field>
+    </record>
+    <data noupdate="1">
+        <record id="picking_type_assigned_users" model="ir.rule">
+            <field name="name">Assigned picking types</field>
+            <field ref="stock.model_stock_picking_type" name="model_id"/>
+            <field name="domain_force">[('id', 'in', user.picking_type_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('group_assigned_picking_types_user'))]"/>
+        </record>
+        <record id="location_assigned_users" model="ir.rule">
+            <field name="name">Assigned Locations</field>
+            <field ref="stock.model_stock_location" name="model_id"/>
+            <field name="domain_force">[('id', 'in', user.stock_location_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('group_assigned_picking_types_user'))]"/>
+        </record>
+        <record id="stock_quant_assigned_users" model="ir.rule">
+            <field name="name">Stock Quant Locations</field>
+            <field ref="stock.model_stock_quant" name="model_id"/>
+            <field name="domain_force">[('location_id.id', 'in', user.stock_location_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('group_assigned_picking_types_user'))]"/>
+        </record>
+        <record id="picking_assigned_users" model="ir.rule">
+            <field name="name">Assigned pickings</field>
+            <field ref="stock.model_stock_picking" name="model_id"/>
+            <field name="domain_force">[('picking_type_id.id','in',user.picking_type_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('group_assigned_picking_types_user'))]"/>
+        </record>
+    </data>
+
+</odoo>

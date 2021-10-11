@@ -11,9 +11,11 @@
     ],
     'data': [
         # 'security/ir.model.access.csv',
+        'security/stock_security.xml',
         'views/product_template_view.xml',
         'views/res_partner_view.xml',
         'views/stock_picking_views.xml',
+        'views/users_view.xml',
     ],
     'installable': True,
 }

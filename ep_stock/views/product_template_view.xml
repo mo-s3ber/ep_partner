@@ -24,7 +24,10 @@
                                 <field name="rc_pg_description"/>
                                 <field name="coo"/>
                                 <field name="unit_ga"/>
-                                <field name="l1_urrency"/>
+                                <field name="ga_currency"/>
+                                <field name="min_qty"/>
+                                <field name="unit_l1"/>
+                                <field name="l1_currency"/>
                                 <field name="unit_l2"/>
                                 <field name="l2_currency"/>
                                 <field name="discount_1"/>
