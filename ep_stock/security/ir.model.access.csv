@@ -1,1 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_inquiry,access.purchase.inquiry,model_purchase_inquiry,base.group_user,1,1,1,1
+access_purchase_inquiry_line,access.purchase.inquiry.line,model_purchase_inquiry_line,base.group_user,1,1,1,1
+

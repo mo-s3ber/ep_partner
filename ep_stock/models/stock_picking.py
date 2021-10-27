@@ -21,5 +21,9 @@ class StockPicking(models.Model):
     payment_condition = fields.Char('Payment Condition',states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},)
     oc_delivery_incoterm = fields.Char('OC Delivery Incoterm',states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},)
     oc_date = fields.Date('OC Date',states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},)
+    delivery_type = fields.Selection([('project','Project'),('user','User')],string='Delivery Type')
+    delivery_project_name = fields.Char('Delivery Project')
+    delivery_partner_id = fields.Many2one('res.partner','Delivery User')
+
 
 

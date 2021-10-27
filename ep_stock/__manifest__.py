@@ -7,15 +7,17 @@
     'website': 'http://www.siemens.com.eg',
     'license': 'AGPL-3',
     'depends': [
-        'mail', 'stock',
+        'base','mail','product', 'stock'
     ],
     'data': [
-        # 'security/ir.model.access.csv',
         'security/stock_security.xml',
+        'security/ir.model.access.csv',
+        'data/ir_sequence_data.xml',
         'views/product_template_view.xml',
         'views/res_partner_view.xml',
         'views/stock_picking_views.xml',
         'views/users_view.xml',
+        'views/purchase_inquiry_view.xml',
     ],
     'installable': True,
 }

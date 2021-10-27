@@ -6,6 +6,9 @@
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='origin']" position="after">
+                <field name="delivery_type" attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}"/>
+                <field name="delivery_project_name" attrs="{'invisible': ['|',('delivery_type','!=','project'),('picking_type_code', '=', 'incoming')]}"/>
+                <field name="delivery_partner_id" attrs="{'invisible': ['|',('delivery_type','!=','user'),('picking_type_code', '=', 'incoming')]}"/>
                 <field name="internal_po_number" attrs="{'invisible': [('picking_type_code', '=', 'outgoing')]}"/>
                 <field name="invoice_number" attrs="{'invisible': [('picking_type_code', '=', 'outgoing')]}"/>
                 <field name="icc_date" attrs="{'invisible': [('picking_type_code', '=', 'outgoing')]}"/>

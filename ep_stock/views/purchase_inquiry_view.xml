@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree view -->
+    <record id="purchase_inquiry_tree_view" model="ir.ui.view">
+        <field name="name">purchase.inquiry.tree</field>
+        <field name="model">purchase.inquiry</field>
+        <field name="priority">2</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase Inquiry Request">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="date"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'confirm'" decoration-success="state == 'done'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="purchase_inquiry_form_view" model="ir.ui.view">
+        <field name="name">purchase.inquiry.form</field>
+        <field name="model">purchase.inquiry</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Inquiry Request">
+                <header>
+                    <button name="confirm" type="object" groups="stock.group_stock_manager"
+                            string="Confirm" class="oe_highlight" states="draft"/>
+                    <button name="done" type="object" groups="stock.group_stock_manager"
+                            string="Approved" class="oe_highlight" states="confirm"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_left" style="width: 500px;">
+                        <div class="oe_title" style="width: 390px;">
+                            <label class="oe_edit_only" for="name"/>
+                            <h1>
+                                <field name="name" class="oe_inline" readonly="1"/>
+                            </h1>
+                        </div>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="date" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products" name="line_ids">
+                            <field name="line_ids" attrs="{'readonly':[('state','=','done')]}">
+                                <tree editable="bottom">
+                                    <field name="inquiry_state" invisible="1"/>
+                                    <field name="product_id" domain="[('is_available_distributor','=','available')]" attrs="{'readonly':[('inquiry_state','!=','draft')]}"/>
+                                    <field name="name" attrs="{'readonly':[('inquiry_state','!=','draft')]}"/>
+                                    <field name="order_qty" attrs="{'readonly':[('inquiry_state','!=','draft')]}"/>
+                                    <field name="qty_available" groups="stock.group_stock_manager"/>
+                                    <field name="partner_id" readonly="1" attrs="{'column_invisible': [('parent.state', '=', 'draft')]}"/>
+                                    <field name="product_qty" readonly="1" attrs="{'column_invisible': [('parent.state', '=', 'draft')]}"/>
+                                    <field name="price_unit" readonly="1" attrs="{'column_invisible': [('parent.state', '=', 'draft')]}"/>
+                                    <field name="scheduled_date" readonly="1" attrs="{'column_invisible': [('parent.state', '=', 'draft')]}"/>
+                                    <field name="inquiry_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                <group colspan="4">
+                                    <field name="note" nolabel="1" placeholder="Terms and conditions..."
+                                           attrs="{'readonly':[('state','=','done')]}"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="purchase_inquiry_manager_form_view" model="ir.ui.view">
+        <field name="name">purchase.inquiry.form.inherit</field>
+        <field name="model">purchase.inquiry</field>
+        <field name="inherit_id" ref="ep_stock.purchase_inquiry_form_view"/>
+        <field name="priority">36</field>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='product_qty']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='price_unit']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='scheduled_date']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Actions View -->
+
+    <record model="ir.actions.act_window" id="action_my_purchase_inquiry">
+        <field name="name">My Inquiry Requests</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.inquiry</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_purchase_inquiry_requests">
+        <field name="name">Requests For Approval</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.inquiry</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'draft')]</field>
+        <field name="context">{'create': False}</field>
+    </record>
+    <record model="ir.actions.act_window" id="action_all_purchase_inquiry_requests">
+        <field name="name">All Requests</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.inquiry</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+
+    <menuitem id="menu_purchase_inquiry_parent" parent="stock.menu_stock_root"
+              name="Inquiry Requests" sequence="3"/>
+    <menuitem id="menu_my_purchase_inquiry" action="action_my_purchase_inquiry" parent="menu_purchase_inquiry_parent"
+              name="My Inquiry Requests" sequence="1"/>
+    <menuitem id="menu_purchase_inquiry_for_approval" action="action_purchase_inquiry_requests"
+              parent="menu_purchase_inquiry_parent"
+              name="Requests For Approval" sequence="2" groups="stock.group_stock_manager"/>
+    <menuitem id="menu_all_purchase_inquiry" action="action_all_purchase_inquiry_requests"
+              parent="menu_purchase_inquiry_parent"
+              name="All Requests" sequence="3" groups="stock.group_stock_manager"/>
+</odoo>

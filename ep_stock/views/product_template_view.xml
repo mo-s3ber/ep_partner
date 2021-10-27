@@ -9,6 +9,7 @@
                     <page name="sap" string="SAP Information">
                         <group>
                             <group>
+                                <field name="is_available_distributor" invisible="1"/>
                                 <field name="mlfb"/>
                                 <field name="sap_material_number"/>
                                 <field name="org_id_supplier"/>
@@ -37,6 +38,47 @@
                         </group>
                     </page>
                 </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_template_kanban_is_available_view">
+            <field name="name">Product Template Kanban Stock</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="inside">
+                    <field name="is_available_distributor"/>
+                </xpath>
+                <xpath expr="//t[@t-if='record.default_code.value']" position="after">
+                    <div name="mlfb" class="mt-1">
+                        <t t-if="record.mlfb.value">[<field name="mlfb"/>]
+                        </t>
+                    </div>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_kanban_details')]" position="after">
+                    <div class="oe_kanban_content">
+                        <div class="o_kanban_record_bottom">
+                            <div class="oe_kanban_bottom_left"/>
+                            <div class="oe_kanban_bottom_right">
+                                <field name="is_available_distributor" widget="label_selection" readonly="1"
+                                       class="bg-danger"
+                                       options="{'classes': {'not_available': 'danger','available': 'success'}}"/>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="product_template_tree_available_view">
+            <field name="name">product.template.product.tree</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="default_code" position="after">
+                    <field name="mlfb"/>
+                    <field name="is_available_distributor" widget="label_selection"
+                           options="{'classes': {'not_available': 'danger','available': 'success'}}"/>
+                </field>
             </field>
         </record>
     </data>

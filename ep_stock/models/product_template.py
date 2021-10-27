@@ -38,6 +38,24 @@ class ProductTemplate(models.Model):
     discount_1 = fields.Float(string='L2 Discount Level-1')
     discount_2 = fields.Float(string='L2 Discount Level-2')
     discount_3 = fields.Float(string='L2 Discount Level-3')
+    is_available_distributor = fields.Selection([('available','Available'),('not_available','Not Available')],compute='_compute_is_available_distributor',search='_is_available_search',string='Available in other distributors')
+
+
+    def _is_available_search(self, operator, value):
+        recs = self.search([]).filtered(
+            lambda x: x.is_available_distributor == value)
+        if recs:
+            return [('id', 'in', [x.id for x in recs])]
+
+    def _compute_is_available_distributor(self):
+        for rec in self:
+            product_qty = self.env['stock.quant'].sudo().search([('product_id','=',rec.product_variant_id.id)])
+            if product_qty:
+                rec.is_available_distributor = 'available'
+            else:
+                rec.is_available_distributor = 'not_available'
+
+
 
 
 class ProductProduct(models.Model):
@@ -81,3 +99,5 @@ class ProductProduct(models.Model):
                               readonly=False, store=True)
     discount_3 = fields.Float(related="product_tmpl_id.discount_3",
                               readonly=False, store=True)
+
+
