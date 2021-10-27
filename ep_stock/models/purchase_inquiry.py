@@ -14,7 +14,7 @@ from odoo.tools.misc import formatLang, get_lang
 
 class PurchaseInquiry(models.Model):
     _name = 'purchase.inquiry'
-    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin', 'utm.mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Purchase Inquiry Request'
 
     name = fields.Char()
