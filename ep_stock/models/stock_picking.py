@@ -11,6 +11,12 @@ from odoo.tools.float_utils import float_is_zero
 from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tools.misc import formatLang, get_lang
 
+class StockLocations(models.Model):
+    _inherit = "stock.location"
+
+    user_ids = fields.Many2many(
+        'res.users','location_security_stock_location_users','location_id','user_id')
+
 
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
@@ -24,6 +30,7 @@ class StockPicking(models.Model):
     delivery_type = fields.Selection([('project','Project'),('user','User')],string='Delivery Type')
     delivery_project_name = fields.Char('Delivery Project')
     delivery_partner_id = fields.Many2one('res.partner','Delivery User')
+    request_id = fields.Many2one('purchase.inquiry')
 
 
 

@@ -7,14 +7,32 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='origin']" position="after">
                 <field name="delivery_type" attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}"/>
-                <field name="delivery_project_name" attrs="{'invisible': ['|',('delivery_type','!=','project'),('picking_type_code', '=', 'incoming')]}"/>
-                <field name="delivery_partner_id" attrs="{'invisible': ['|',('delivery_type','!=','user'),('picking_type_code', '=', 'incoming')]}"/>
+                <field name="delivery_project_name"
+                       attrs="{'invisible': ['|',('delivery_type','!=','project'),('picking_type_code', '=', 'incoming')]}"/>
+                <field name="delivery_partner_id"
+                       attrs="{'invisible': ['|',('delivery_type','!=','user'),('picking_type_code', '=', 'incoming')]}"/>
                 <field name="internal_po_number" attrs="{'invisible': [('picking_type_code', '=', 'outgoing')]}"/>
                 <field name="invoice_number" attrs="{'invisible': [('picking_type_code', '=', 'outgoing')]}"/>
                 <field name="icc_date" attrs="{'invisible': [('picking_type_code', '=', 'outgoing')]}"/>
                 <field name="payment_condition" attrs="{'invisible': [('picking_type_code', '=', 'outgoing')]}"/>
                 <field name="oc_delivery_incoterm" attrs="{'invisible': [('picking_type_code', '=', 'outgoing')]}"/>
                 <field name="oc_date" attrs="{'invisible': [('picking_type_code', '=', 'outgoing')]}"/>
+            </xpath>
+            <xpath expr="//sheet/group/group/field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="stock_picking_ep_stock_manager_form_view" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="priority">36</field>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group/group/field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">0</attribute>
             </xpath>
         </field>
     </record>

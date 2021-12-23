@@ -13,6 +13,7 @@
         'security/stock_security.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence_data.xml',
+        'wizard/make_stock_picking_view.xml',
         'views/product_template_view.xml',
         'views/res_partner_view.xml',
         'views/stock_picking_views.xml',

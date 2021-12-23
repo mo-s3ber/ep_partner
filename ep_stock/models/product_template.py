@@ -40,7 +40,6 @@ class ProductTemplate(models.Model):
     discount_3 = fields.Float(string='L2 Discount Level-3')
     is_available_distributor = fields.Selection([('available','Available'),('not_available','Not Available')],compute='_compute_is_available_distributor',search='_is_available_search',string='Available in other distributors')
 
-
     def _is_available_search(self, operator, value):
         recs = self.search([]).filtered(
             lambda x: x.is_available_distributor == value)
