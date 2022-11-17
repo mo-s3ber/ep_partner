@@ -1,6 +1,6 @@
 {
     'name': 'EP Stock Management',
-    'version': '14.0.1.0.0',
+    'version': '15.0.1.0.0',
     'category': 'Inventory',
     'summary': 'EP Stock Management',
     'author': "Mohamed Saber, SIEMENS S.A.E",

@@ -26,5 +26,4 @@
             <field name="groups" eval="[(4, ref('group_assigned_picking_types_user'))]"/>
         </record>
     </data>
-
 </odoo>
